@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleProp, ViewStyle, TextStyle } from 'react-native';
+import { StyleProp, ViewStyle, TextStyle, FlatList } from 'react-native';
 import { Moment } from 'moment';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -185,14 +185,14 @@ export interface WeekViewProps {
   fixedHorizontally?: boolean;
   isRefreshing?: boolean;
 
-  RefreshComponent?: React.Component;
+  RefreshComponent?: React.FC;
 
   locale?: string;
   rightToLeft?: boolean;
 
   // Style props
   headerStyle?: StyleProp<ViewStyle>;
-  headerTextStyle?: StyleProp<ViewStyle>;
+  headerTextStyle?: StyleProp<TextStyle>;
   hourTextStyle?: StyleProp<TextStyle>;
   eventContainerStyle?: StyleProp<ViewStyle>;
 
@@ -210,9 +210,9 @@ export interface WeekViewProps {
   prependMostRecent?: boolean;
 
   // new props
-  HeaderContentComponent?: React.FC;
-  TitleHeaderComponent?: React.FC<{ selectedDate: Moment }>;
-  containerHeaderStyle?: StyleProp<ViewStyle>;
+  hasCustomHeader?: boolean;
+  pagingEnabled?: boolean;
+  customHeaderRef?: React.RefObject<FlatList>;
 }
 
 declare const WeekView: React.ComponentType<WeekViewProps>;

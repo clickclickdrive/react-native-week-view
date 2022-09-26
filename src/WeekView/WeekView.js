@@ -119,11 +119,20 @@ export default class WeekView extends Component {
   }
 
   componentDidMount() {
+    const { customHeaderRef, hasCustomHeader } = this.props;
     requestAnimationFrame(() => {
       this.scrollToVerticalStart();
     });
     this.eventsGridScrollX.addListener((position) => {
-      this.header?.scrollToOffset({ offset: position.value, animated: false });
+      hasCustomHeader
+        ? customHeaderRef?.current.scrollToOffset({
+            offset: position.value,
+            animated: false,
+          })
+        : this.header?.scrollToOffset({
+            offset: position.value,
+            animated: false,
+          });
     });
 
     this.windowListener = Dimensions.addEventListener(
@@ -504,10 +513,8 @@ export default class WeekView extends Component {
       maxToRenderPerBatch,
       updateCellsBatchingPeriod,
 
-      TitleHeaderComponent,
-      containerHeaderStyle,
-      HeaderContentComponent,
-      WeekViewHeader,
+      hasCustomHeader,
+      pagingEnabled,
     } = this.props;
     const {
       currentMoment,
@@ -548,11 +555,8 @@ export default class WeekView extends Component {
 
     return (
       <GestureHandlerRootView style={styles.container}>
-        {WeekViewHeader && <WeekViewHeader />}
-        <View style={[styles.headerContainer, containerHeaderStyle]}>
-          {HeaderContentComponent ? (
-            <HeaderContentComponent />
-          ) : (
+        <View style={styles.headerContainer}>
+          {!hasCustomHeader && (
             <>
               <Title
                 showTitle={showTitle}
@@ -562,11 +566,10 @@ export default class WeekView extends Component {
                 selectedDate={currentMoment}
                 onMonthPress={onMonthPress}
                 width={timeLabelsWidth}
-                TitleComponent={TitleHeaderComponent}
               />
               <VirtualizedList
                 horizontal
-                pagingEnabled
+                pagingEnabled={pagingEnabled}
                 inverted={horizontalInverted}
                 showsHorizontalScrollIndicator={false}
                 scrollEnabled={false}
@@ -669,7 +672,7 @@ export default class WeekView extends Component {
                 );
               }}
               horizontal
-              pagingEnabled
+              pagingEnabled={pagingEnabled}
               inverted={horizontalInverted}
               onMomentumScrollBegin={this.scrollBegun}
               onMomentumScrollEnd={this.scrollEnded}
@@ -750,11 +753,12 @@ WeekView.propTypes = {
   initialNumToRender: PropTypes.number,
   maxToRenderPerBatch: PropTypes.number,
   updateCellsBatchingPeriod: PropTypes.number,
-
-  WeekViewHeader: PropTypes.elementType,
-  containerHeaderStyle: PropTypes.object,
-  TitleHeaderComponent: PropTypes.elementType,
-  HeaderContentComponent: PropTypes.elementType,
+  hasCustomHeader: PropTypes.bool,
+  pagingEnabled: PropTypes.bool,
+  customHeaderRef: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
+  ]),
 };
 
 WeekView.defaultProps = {

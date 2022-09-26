@@ -214,9 +214,9 @@ const App = ({}) => {
           onEditEvent={onEditEvent}
           editEventConfig={EDIT_EVENT_CONFIG}
           // new props
-          // HeaderContentComponent={HeaderContentComponent}
-          // TitleHeaderComponent={TitleComponent}
-          // containerHeaderStyle={}
+          // hasCustomHeader
+          // pagingEnabled={false}
+          // customHeaderRef={flatListRef}
         />
       </SafeAreaView>
     </>
