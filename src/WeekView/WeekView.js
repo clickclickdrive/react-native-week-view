@@ -755,10 +755,6 @@ WeekView.propTypes = {
   updateCellsBatchingPeriod: PropTypes.number,
   hasCustomHeader: PropTypes.bool,
   pagingEnabled: PropTypes.bool,
-  customHeaderRef: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.shape({ current: PropTypes.instanceOf(Element) }),
-  ]),
 };
 
 WeekView.defaultProps = {
