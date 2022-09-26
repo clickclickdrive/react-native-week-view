@@ -208,6 +208,11 @@ export interface WeekViewProps {
 
   // Other props (patch RN bugs)
   prependMostRecent?: boolean;
+
+  // new props
+  HeaderContentComponent?: React.FC;
+  TitleHeaderComponent?: React.FC<{ selectedDate: Moment }>;
+  containerHeaderStyle?: StyleProp<ViewStyle>;
 }
 
 declare const WeekView: React.ComponentType<WeekViewProps>;

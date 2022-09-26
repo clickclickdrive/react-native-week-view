@@ -213,6 +213,10 @@ const App = ({}) => {
           editingEvent={editingEvent}
           onEditEvent={onEditEvent}
           editEventConfig={EDIT_EVENT_CONFIG}
+          // new props
+          // HeaderContentComponent={HeaderContentComponent}
+          // TitleHeaderComponent={TitleComponent}
+          // containerHeaderStyle={}
         />
       </SafeAreaView>
     </>

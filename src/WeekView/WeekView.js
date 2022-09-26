@@ -123,7 +123,7 @@ export default class WeekView extends Component {
       this.scrollToVerticalStart();
     });
     this.eventsGridScrollX.addListener((position) => {
-      this.header.scrollToOffset({ offset: position.value, animated: false });
+      this.header?.scrollToOffset({ offset: position.value, animated: false });
     });
 
     this.windowListener = Dimensions.addEventListener(
@@ -503,6 +503,11 @@ export default class WeekView extends Component {
       initialNumToRender,
       maxToRenderPerBatch,
       updateCellsBatchingPeriod,
+
+      TitleHeaderComponent,
+      containerHeaderStyle,
+      HeaderContentComponent,
+      WeekViewHeader,
     } = this.props;
     const {
       currentMoment,
@@ -543,52 +548,60 @@ export default class WeekView extends Component {
 
     return (
       <GestureHandlerRootView style={styles.container}>
-        <View style={styles.headerContainer}>
-          <Title
-            showTitle={showTitle}
-            style={headerStyle}
-            textStyle={headerTextStyle}
-            numberOfDays={numberOfDays}
-            selectedDate={currentMoment}
-            onMonthPress={onMonthPress}
-            width={timeLabelsWidth}
-          />
-          <VirtualizedList
-            horizontal
-            pagingEnabled
-            inverted={horizontalInverted}
-            showsHorizontalScrollIndicator={false}
-            scrollEnabled={false}
-            ref={this.headerRef}
-            data={initialDates}
-            getItem={(data, index) => data[index]}
-            getItemCount={(data) => data.length}
-            getItemLayout={this.getListItemLayout}
-            keyExtractor={(item) => item}
-            initialScrollIndex={PAGES_OFFSET}
-            extraData={dayWidth}
-            windowSize={windowSize}
-            initialNumToRender={initialNumToRender}
-            maxToRenderPerBatch={maxToRenderPerBatch}
-            updateCellsBatchingPeriod={updateCellsBatchingPeriod}
-            renderItem={({ item }) => {
-              return (
-                <Header
-                  key={item}
-                  style={headerStyle}
-                  textStyle={headerTextStyle}
-                  TodayComponent={TodayHeaderComponent}
-                  DayComponent={DayHeaderComponent}
-                  formatDate={formatDateHeader}
-                  initialDate={item}
-                  numberOfDays={numberOfDays}
-                  rightToLeft={rightToLeft}
-                  onDayPress={onDayPress}
-                  dayWidth={dayWidth}
-                />
-              );
-            }}
-          />
+        {WeekViewHeader && <WeekViewHeader />}
+        <View style={[styles.headerContainer, containerHeaderStyle]}>
+          {HeaderContentComponent ? (
+            <HeaderContentComponent />
+          ) : (
+            <>
+              <Title
+                showTitle={showTitle}
+                style={headerStyle}
+                textStyle={headerTextStyle}
+                numberOfDays={numberOfDays}
+                selectedDate={currentMoment}
+                onMonthPress={onMonthPress}
+                width={timeLabelsWidth}
+                TitleComponent={TitleHeaderComponent}
+              />
+              <VirtualizedList
+                horizontal
+                pagingEnabled
+                inverted={horizontalInverted}
+                showsHorizontalScrollIndicator={false}
+                scrollEnabled={false}
+                ref={this.headerRef}
+                data={initialDates}
+                getItem={(data, index) => data[index]}
+                getItemCount={(data) => data.length}
+                getItemLayout={this.getListItemLayout}
+                keyExtractor={(item) => item}
+                initialScrollIndex={PAGES_OFFSET}
+                extraData={dayWidth}
+                windowSize={windowSize}
+                initialNumToRender={initialNumToRender}
+                maxToRenderPerBatch={maxToRenderPerBatch}
+                updateCellsBatchingPeriod={updateCellsBatchingPeriod}
+                renderItem={({ item }) => {
+                  return (
+                    <Header
+                      key={item}
+                      style={headerStyle}
+                      textStyle={headerTextStyle}
+                      TodayComponent={TodayHeaderComponent}
+                      DayComponent={DayHeaderComponent}
+                      formatDate={formatDateHeader}
+                      initialDate={item}
+                      numberOfDays={numberOfDays}
+                      rightToLeft={rightToLeft}
+                      onDayPress={onDayPress}
+                      dayWidth={dayWidth}
+                    />
+                  );
+                }}
+              />
+            </>
+          )}
         </View>
         {isRefreshing && RefreshComponent && (
           <RefreshComponent
@@ -737,6 +750,11 @@ WeekView.propTypes = {
   initialNumToRender: PropTypes.number,
   maxToRenderPerBatch: PropTypes.number,
   updateCellsBatchingPeriod: PropTypes.number,
+
+  WeekViewHeader: PropTypes.elementType,
+  containerHeaderStyle: PropTypes.object,
+  TitleHeaderComponent: PropTypes.elementType,
+  HeaderContentComponent: PropTypes.elementType,
 };
 
 WeekView.defaultProps = {

@@ -20,6 +20,7 @@ const Title = ({
   textStyle,
   onMonthPress,
   width,
+  TitleComponent,
 }) => {
   if (!showTitle) {
     return <View style={[styles.title, { width }, style]} />;
@@ -31,17 +32,21 @@ const Title = ({
       onPress={() => onMonthPress && onMonthPress(selectedDate, formattedMonth)}
       disabled={!onMonthPress}
     >
-      <Text
-        style={[
-          {
-            fontSize: getFontSizeHeader(numberOfDays),
-            textAlign: 'center',
-          },
-          textStyle,
-        ]}
-      >
-        {formattedMonth}
-      </Text>
+      {TitleComponent ? (
+        <TitleComponent selectedDate={selectedDate} />
+      ) : (
+        <Text
+          style={[
+            {
+              fontSize: getFontSizeHeader(numberOfDays),
+              textAlign: 'center',
+            },
+            textStyle,
+          ]}
+        >
+          {formattedMonth}
+        </Text>
+      )}
     </TouchableOpacity>
   );
 };
@@ -54,6 +59,8 @@ Title.propTypes = {
   textStyle: PropTypes.object,
   onMonthPress: PropTypes.func,
   width: PropTypes.number.isRequired,
+
+  TitleComponent: PropTypes.elementType,
 };
 
 export default React.memo(Title);
