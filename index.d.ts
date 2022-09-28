@@ -212,10 +212,10 @@ export interface WeekViewProps {
   // new props
   pagingEnabled?: boolean;
   hasBorderStyle?: boolean;
-  headerContainerStyle: StyleProp<ViewStyle>;
-  CustomTitleComponent: React.FC<{ selectedDate: Moment }>;
-  CustomHeaderComponent: React.FC<HeaderComponentProps>;
-  CustomWeekViewHeaderComponent: React.FC<>;
+  headerContainerStyle?: StyleProp<ViewStyle>;
+  CustomTitleComponent?: React.FC<{ selectedDate: Moment }>;
+  CustomHeaderComponent?: React.FC<HeaderComponentProps>;
+  CustomWeekViewHeaderComponent?: React.FC;
 }
 
 declare const WeekView: React.ComponentType<WeekViewProps>;
