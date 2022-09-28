@@ -23,16 +23,26 @@ const Column = ({
   TodayComponent,
   onDayPress,
   width,
+  hasBorderStyle,
+  CustomHeaderComponent,
 }) => {
   const formattedDate = getFormattedDate(column, format);
   const isToday = moment().isSame(column, 'days');
 
   const ComponentChosen =
-    DayComponent || (isToday && TodayComponent) || DefaultDayComponent;
+    CustomHeaderComponent ||
+    DayComponent ||
+    (isToday && TodayComponent) ||
+    DefaultDayComponent;
 
   return (
     <TouchableOpacity
-      style={[styles.column, style, { width }]}
+      style={[
+        styles.column,
+        hasBorderStyle && styles.borderStyle,
+        style,
+        { width },
+      ]}
       onPress={() => onDayPress && onDayPress(column, formattedDate)}
       disabled={!onDayPress}
     >
@@ -57,6 +67,9 @@ const WeekViewHeader = ({
   rightToLeft,
   onDayPress,
   dayWidth,
+  // new Props
+  hasBorderStyle,
+  CustomHeaderComponent,
 }) => {
   const columns =
     calculateDaysArray(initialDate, numberOfDays, rightToLeft) || [];
@@ -73,6 +86,8 @@ const WeekViewHeader = ({
           TodayComponent={TodayComponent}
           onDayPress={onDayPress}
           width={dayWidth}
+          hasBorderStyle={hasBorderStyle}
+          CustomHeaderComponent={CustomHeaderComponent}
         />
       ))}
     </View>
@@ -90,6 +105,9 @@ WeekViewHeader.propTypes = {
   TodayComponent: PropTypes.elementType,
   onDayPress: PropTypes.func,
   dayWidth: PropTypes.number.isRequired,
+  // new Props
+  hasBorderStyle: PropTypes.bool,
+  CustomHeaderComponent: PropTypes.elementType,
 };
 
 WeekViewHeader.defaultProps = {

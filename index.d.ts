@@ -20,7 +20,7 @@ export interface WeekViewEvent extends Record<string, any> {
 export interface HeaderComponentProps {
   date: Moment;
   formattedDate: string;
-  textStyle: StyleProp<TextStyle>;
+  textStyle?: StyleProp<TextStyle>;
   isToday: boolean;
 }
 
@@ -210,9 +210,12 @@ export interface WeekViewProps {
   prependMostRecent?: boolean;
 
   // new props
-  hasCustomHeader?: boolean;
   pagingEnabled?: boolean;
-  customHeaderRef?: React.RefObject<FlatList>;
+  hasBorderStyle?: boolean;
+  headerContainerStyle: StyleProp<ViewStyle>;
+  CustomTitleComponent: React.FC<{ selectedDate: Moment }>;
+  CustomHeaderComponent: React.FC<HeaderComponentProps>;
+  CustomWeekViewHeaderComponent: React.FC<>;
 }
 
 declare const WeekView: React.ComponentType<WeekViewProps>;

@@ -4,7 +4,7 @@ const styles = StyleSheet.create({
   title: {
     justifyContent: 'center',
     alignItems: 'center',
-    borderTopWidth: 1,
+    // borderTopWidth: 1,
   },
 });
 

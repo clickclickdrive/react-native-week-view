@@ -1,12 +1,5 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React, {useState, useReducer, useRef, useCallback} from 'react';
+import {View} from 'react-native';
 import {
   SafeAreaView,
   StyleSheet,
@@ -72,6 +65,10 @@ const MyRefreshComponent = ({style}) => (
   // Just an example
   <ActivityIndicator style={style} color="red" size="large" />
 );
+
+const DRAG_EVENT_CONFIG = {
+  afterLongPressDuration: 1000,
+};
 
 const EDIT_EVENT_CONFIG = {
   top: true,
@@ -213,10 +210,27 @@ const App = ({}) => {
           editingEvent={editingEvent}
           onEditEvent={onEditEvent}
           editEventConfig={EDIT_EVENT_CONFIG}
-          // new props
-          // hasCustomHeader
+          dragEventConfig={DRAG_EVENT_CONFIG}
+          // New Props
           // pagingEnabled={false}
-          // customHeaderRef={flatListRef}
+          // hasBorderStyle={false}
+          // // remove styles.header in order to use headerContainerStyle
+          // headerContainerStyle={styles.headerContainerStyle}
+          // CustomTitleComponent={() => (
+          //   <View
+          //     style={{backgroundColor: 'white', width: '100%', height: '100%'}}
+          //   />
+          // )}
+          // CustomHeaderComponent={() => (
+          //   <View
+          //     style={{backgroundColor: 'brown', width: '100%', height: 140}}
+          //   />
+          // )}
+          // CustomWeekViewHeaderComponent={() => (
+          //   <View
+          //     style={{backgroundColor: 'pink', width: '100%', height: 140}}
+          //   />
+          // )}
         />
       </SafeAreaView>
     </>
@@ -224,6 +238,12 @@ const App = ({}) => {
 };
 
 const styles = StyleSheet.create({
+  headerContainerStyle: {
+    backgroundColor: 'red',
+    height: 100,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+  },
   container: {
     flex: 1,
     backgroundColor: '#FFF',

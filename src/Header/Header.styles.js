@@ -12,11 +12,13 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    borderTopWidth: 1,
-    borderLeftWidth: 1,
   },
   text: {
     fontSize: 12,
+  },
+  borderStyle: {
+    borderTopWidth: 1,
+    borderLeftWidth: 1,
   },
 });
 
