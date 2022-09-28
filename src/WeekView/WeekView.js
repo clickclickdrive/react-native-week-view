@@ -95,6 +95,7 @@ export default class WeekView extends Component {
     this.header = null;
     this.currentPageIndex = PAGES_OFFSET;
     this.eventsGridScrollX = new Animated.Value(0);
+    this.headerScrollX = new Animated.Value(0);
 
     const initialDates = calculatePagesDates(
       props.selectedDate,
@@ -125,6 +126,12 @@ export default class WeekView extends Component {
     });
     this.eventsGridScrollX.addListener((position) => {
       this.header.scrollToOffset({ offset: position.value, animated: false });
+    });
+    this.headerScrollX.addListener((position) => {
+      this.eventsGrid.scrollToOffset({
+        offset: position.value,
+        animated: false,
+      });
     });
 
     this.windowListener = Dimensions.addEventListener(
@@ -181,6 +188,7 @@ export default class WeekView extends Component {
 
   componentWillUnmount() {
     this.eventsGridScrollX.removeAllListeners();
+    this.headerScrollX.removeListener();
     if (this.windowListener) {
       this.windowListener.remove();
     }
@@ -569,7 +577,7 @@ export default class WeekView extends Component {
             pagingEnabled={pagingEnabled}
             inverted={horizontalInverted}
             showsHorizontalScrollIndicator={false}
-            scrollEnabled={false}
+            // scrollEnabled={false}
             ref={this.headerRef}
             data={initialDates}
             getItem={(data, index) => data[index]}
@@ -582,6 +590,21 @@ export default class WeekView extends Component {
             initialNumToRender={initialNumToRender}
             maxToRenderPerBatch={maxToRenderPerBatch}
             updateCellsBatchingPeriod={updateCellsBatchingPeriod}
+            scrollBegun={this.scrollBegun}
+            scrollEnded={this.scrollEnded}
+            // onScroll={}
+            onScroll={Animated.event(
+              [
+                {
+                  nativeEvent: {
+                    contentOffset: {
+                      x: this.headerScrollX,
+                    },
+                  },
+                },
+              ],
+              { useNativeDriver: false },
+            )}
             renderItem={({ item }) => {
               return (
                 <Header
