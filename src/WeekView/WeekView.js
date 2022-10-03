@@ -147,6 +147,34 @@ export default class WeekView extends Component {
     if (this.props.locale !== prevProps.locale) {
       setLocale(this.props.locale);
     }
+
+    if (
+      prevProps?.selectedDate.toDateString() !==
+      this.props.selectedDate.toDateString()
+    ) {
+      const initialDates = calculatePagesDates(
+        // eslint-disable-next-line react/no-access-state-in-setstate
+        this.props.selectedDate,
+        this.props.numberOfDays,
+        1, // weekStartsOn equal to 1 means Monday
+        this.props.fixedHorizontally,
+      );
+
+      this.currentPageIndex = PAGES_OFFSET;
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState(
+        {
+          currentMoment: moment(initialDates[this.currentPageIndex]).toDate(),
+          initialDates,
+        },
+        () => {
+          this.eventsGrid.scrollToIndex({
+            index: PAGES_OFFSET,
+            animated: false,
+          });
+        },
+      );
+    }
     if (this.props.numberOfDays !== prevProps.numberOfDays) {
       /**
        * HOTFIX: linter rules no-access-state-in-setstate and no-did-update-set-state
