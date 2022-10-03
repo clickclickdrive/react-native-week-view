@@ -577,6 +577,9 @@ export default class WeekView extends Component {
             pagingEnabled={pagingEnabled}
             inverted={horizontalInverted}
             showsHorizontalScrollIndicator={false}
+            onStartShouldSetResponderCapture={() => false}
+            onMoveShouldSetResponderCapture={() => false}
+            onResponderTerminationRequest={() => false}
             // scrollEnabled={false}
             ref={this.headerRef}
             data={initialDates}
@@ -590,9 +593,8 @@ export default class WeekView extends Component {
             initialNumToRender={initialNumToRender}
             maxToRenderPerBatch={maxToRenderPerBatch}
             updateCellsBatchingPeriod={updateCellsBatchingPeriod}
-            scrollBegun={this.scrollBegun}
-            scrollEnded={this.scrollEnded}
-            // onScroll={}
+            onMomentumScrollBegin={this.scrollBegun}
+            onMomentumScrollEnd={this.scrollEnded}
             onScroll={Animated.event(
               [
                 {
