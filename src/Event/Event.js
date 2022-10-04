@@ -294,7 +294,9 @@ const Event = ({
             position={{ top, left, height, width }}
           />
         ) : (
-          <Text style={styles.description}>{event.description}</Text>
+          <Text style={[styles.description, event.eventTextStyle]}>
+            {event.description}
+          </Text>
         )}
         <Circles
           isEditing={isEditing}

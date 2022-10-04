@@ -1,16 +1,17 @@
 import React from 'react';
-import { StyleProp, ViewStyle, TextStyle, FlatList } from 'react-native';
+import { StyleProp, ViewStyle, TextStyle } from 'react-native';
 import { Moment } from 'moment';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface WeekViewEvent extends Record<string, any> {
-  id: number;
+  id: number | string;
   description: string;
   startDate: Date;
   endDate: Date;
   resolveOverlap: 'stack' | 'lane' | 'ignore';
   stackKey: string;
-  color: string;
+  color?: string;
+  eventTextStyle?: StyleProp<TextStyle>;
   style?: StyleProp<ViewStyle>;
   disableDrag?: boolean;
   disablePress?: boolean;

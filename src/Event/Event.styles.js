@@ -8,8 +8,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   description: {
-    marginVertical: 8,
-    marginHorizontal: 2,
     color: '#fff',
     textAlign: 'center',
     fontSize: 15,
