@@ -631,7 +631,7 @@ export default class WeekView extends Component {
               this.scrollBegun();
             }}
             onMomentumScrollEnd={(event) => {
-              this.headerScrollX.removeAllListeners();
+              this.setState({ isHeaderScrolling: false });
               this.scrollEnded(event);
             }}
             onScroll={Animated.event(
