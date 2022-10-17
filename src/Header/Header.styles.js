@@ -7,6 +7,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     height: HEADER_HEIGHT,
     alignItems: 'stretch',
+    backgroundColor: 'transparent',
   },
   column: {
     flex: 1,
