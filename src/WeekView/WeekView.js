@@ -113,6 +113,8 @@ export default class WeekView extends Component {
       initialDates,
       windowWidth,
       windowHeight,
+      isHeaderScrolling: false,
+      isEventScrolling: false,
     };
 
     setLocale(props.locale);
@@ -124,14 +126,20 @@ export default class WeekView extends Component {
     requestAnimationFrame(() => {
       this.scrollToVerticalStart();
     });
+
     this.eventsGridScrollX.addListener((position) => {
-      this.header.scrollToOffset({ offset: position.value, animated: false });
+      if (this.state.isEventScrolling) {
+        this.header.scrollToOffset({ offset: position.value, animated: false });
+      }
     });
+
     this.headerScrollX.addListener((position) => {
-      this.eventsGrid.scrollToOffset({
-        offset: position.value,
-        animated: false,
-      });
+      if (this.state.isHeaderScrolling) {
+        this.eventsGrid.scrollToOffset({
+          offset: position.value,
+          animated: false,
+        });
+      }
     });
 
     this.windowListener = Dimensions.addEventListener(
@@ -216,7 +224,7 @@ export default class WeekView extends Component {
 
   componentWillUnmount() {
     this.eventsGridScrollX.removeAllListeners();
-    this.headerScrollX.removeListener();
+    this.headerScrollX.removeAllListeners();
     if (this.windowListener) {
       this.windowListener.remove();
     }
@@ -542,10 +550,8 @@ export default class WeekView extends Component {
       maxToRenderPerBatch,
       updateCellsBatchingPeriod,
       // new Props
-      pagingEnabled,
       CustomTitleComponent,
       headerContainerStyle,
-      hasBorderStyle,
       CustomHeaderComponent,
       CustomWeekViewHeaderComponent,
     } = this.props;
@@ -602,13 +608,12 @@ export default class WeekView extends Component {
           />
           <VirtualizedList
             horizontal
-            pagingEnabled={pagingEnabled}
+            pagingEnabled
             inverted={horizontalInverted}
             showsHorizontalScrollIndicator={false}
             onStartShouldSetResponderCapture={() => false}
             onMoveShouldSetResponderCapture={() => false}
             onResponderTerminationRequest={() => false}
-            // scrollEnabled={false}
             ref={this.headerRef}
             data={initialDates}
             getItem={(data, index) => data[index]}
@@ -621,8 +626,14 @@ export default class WeekView extends Component {
             initialNumToRender={initialNumToRender}
             maxToRenderPerBatch={maxToRenderPerBatch}
             updateCellsBatchingPeriod={updateCellsBatchingPeriod}
-            onMomentumScrollBegin={this.scrollBegun}
-            onMomentumScrollEnd={this.scrollEnded}
+            onMomentumScrollBegin={() => {
+              this.setState({ isHeaderScrolling: true });
+              this.scrollBegun();
+            }}
+            onMomentumScrollEnd={(event) => {
+              this.headerScrollX.removeAllListeners();
+              this.scrollEnded(event);
+            }}
             onScroll={Animated.event(
               [
                 {
@@ -649,7 +660,6 @@ export default class WeekView extends Component {
                   rightToLeft={rightToLeft}
                   onDayPress={onDayPress}
                   dayWidth={dayWidth}
-                  hasBorderStyle={hasBorderStyle}
                   CustomHeaderComponent={CustomHeaderComponent}
                 />
               );
@@ -682,6 +692,8 @@ export default class WeekView extends Component {
             />
             <VirtualizedList
               data={initialDates}
+              showsHorizontalScrollIndicator={false}
+              showsVerticalScrollIndicator={false}
               getItem={(data, index) => data[index]}
               getItemCount={(data) => data.length}
               getItemLayout={this.getListItemLayout}
@@ -723,10 +735,16 @@ export default class WeekView extends Component {
                 );
               }}
               horizontal
-              pagingEnabled={pagingEnabled}
+              pagingEnabled
               inverted={horizontalInverted}
-              onMomentumScrollBegin={this.scrollBegun}
-              onMomentumScrollEnd={this.scrollEnded}
+              onMomentumScrollBegin={() => {
+                this.setState({ isEventScrolling: true });
+                this.scrollBegun();
+              }}
+              onMomentumScrollEnd={(event) => {
+                this.setState({ isEventScrolling: false });
+                this.scrollEnded(event);
+              }}
               scrollEventThrottle={32}
               onScroll={Animated.event(
                 [
@@ -805,8 +823,6 @@ WeekView.propTypes = {
   maxToRenderPerBatch: PropTypes.number,
   updateCellsBatchingPeriod: PropTypes.number,
   // new Props
-  pagingEnabled: PropTypes.bool,
-  hasBorderStyle: PropTypes.bool,
   headerContainerStyle: PropTypes.object,
   CustomTitleComponent: PropTypes.elementType,
   CustomHeaderComponent: PropTypes.elementType,
@@ -831,5 +847,4 @@ WeekView.defaultProps = {
   initialNumToRender: DEFAULT_WINDOW_SIZE,
   maxToRenderPerBatch: PAGES_OFFSET,
   updateCellsBatchingPeriod: 50, // RN default
-  pagingEnabled: false,
 };

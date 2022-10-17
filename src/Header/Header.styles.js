@@ -16,10 +16,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 12,
   },
-  borderStyle: {
-    borderTopWidth: 1,
-    borderLeftWidth: 1,
-  },
 });
 
 export default styles;

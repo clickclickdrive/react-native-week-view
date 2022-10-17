@@ -16,6 +16,7 @@ export interface WeekViewEvent extends Record<string, any> {
   disableDrag?: boolean;
   disablePress?: boolean;
   disableLongPress?: boolean;
+  eventDetail: any;
 }
 
 export interface HeaderComponentProps {
@@ -211,8 +212,6 @@ export interface WeekViewProps {
   prependMostRecent?: boolean;
 
   // new props
-  pagingEnabled?: boolean;
-  hasBorderStyle?: boolean;
   headerContainerStyle?: StyleProp<ViewStyle>;
   CustomTitleComponent?: React.FC<{ selectedDate: Moment }>;
   CustomHeaderComponent?: React.FC<HeaderComponentProps>;
