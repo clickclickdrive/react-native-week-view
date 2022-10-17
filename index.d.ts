@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleProp, ViewStyle, TextStyle, FlatList } from 'react-native';
+import { StyleProp, ViewStyle, TextStyle } from 'react-native';
 import { Moment } from 'moment';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -15,6 +15,7 @@ export interface WeekViewEvent extends Record<string, any> {
   disableDrag?: boolean;
   disablePress?: boolean;
   disableLongPress?: boolean;
+  eventDetail: any;
 }
 
 export interface HeaderComponentProps {
@@ -210,8 +211,6 @@ export interface WeekViewProps {
   prependMostRecent?: boolean;
 
   // new props
-  pagingEnabled?: boolean;
-  hasBorderStyle?: boolean;
   headerContainerStyle?: StyleProp<ViewStyle>;
   CustomTitleComponent?: React.FC<{ selectedDate: Moment }>;
   CustomHeaderComponent?: React.FC<HeaderComponentProps>;
