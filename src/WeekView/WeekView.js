@@ -180,6 +180,10 @@ export default class WeekView extends Component {
             index: PAGES_OFFSET,
             animated: false,
           });
+          this.header.scrollToIndex({
+            index: PAGES_OFFSET,
+            animated: false,
+          });
         },
       );
     }
