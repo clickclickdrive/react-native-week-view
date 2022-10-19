@@ -360,6 +360,7 @@ export default class WeekView extends Component {
         index: moveToIndex,
         animated,
       });
+      this.header.scrollToIndex({ index: moveToIndex, animated });
       this.currentPageIndex = moveToIndex;
     };
 
@@ -452,11 +453,16 @@ export default class WeekView extends Component {
         // After prepending, it needs to scroll to fix its position,
         // to mantain visible content position (mvcp)
         this.currentPageIndex += prependNeeded;
-        const scrollToCurrentIndex = () =>
+        const scrollToCurrentIndex = () => {
           this.eventsGrid.scrollToIndex({
             index: this.currentPageIndex,
             animated: false,
           });
+          this.header.scrollToIndex({
+            index: this.currentPageIndex,
+            animated: false,
+          });
+        };
         newStateCallback = () => setTimeout(scrollToCurrentIndex, 0);
       } else if (movedPages > 0 && pagesToEndOfList < buffer) {
         const appendNeeded = buffer - pagesToEndOfList;
@@ -630,8 +636,8 @@ export default class WeekView extends Component {
             initialNumToRender={initialNumToRender}
             maxToRenderPerBatch={maxToRenderPerBatch}
             updateCellsBatchingPeriod={updateCellsBatchingPeriod}
+            onScrollBeginDrag={() => this.setState({ isHeaderScrolling: true })}
             onMomentumScrollBegin={() => {
-              this.setState({ isHeaderScrolling: true });
               this.scrollBegun();
             }}
             onMomentumScrollEnd={(event) => {
@@ -741,8 +747,10 @@ export default class WeekView extends Component {
               horizontal
               pagingEnabled
               inverted={horizontalInverted}
-              onMomentumScrollBegin={() => {
+              onScrollBeginDrag={() => {
                 this.setState({ isEventScrolling: true });
+              }}
+              onMomentumScrollBegin={() => {
                 this.scrollBegun();
               }}
               onMomentumScrollEnd={(event) => {
