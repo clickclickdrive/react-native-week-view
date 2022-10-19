@@ -6,8 +6,8 @@ import {
   Animated,
   VirtualizedList,
   InteractionManager,
-  ActivityIndicator,
   Platform,
+  RefreshControl,
   Dimensions,
 } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -554,12 +554,12 @@ export default class WeekView extends Component {
       onMonthPress,
       onDayPress,
       isRefreshing,
-      RefreshComponent,
       windowSize,
       initialNumToRender,
       maxToRenderPerBatch,
       updateCellsBatchingPeriod,
       // new Props
+      onRefresh,
       CustomTitleComponent,
       headerContainerStyle,
       CustomHeaderComponent,
@@ -676,14 +676,7 @@ export default class WeekView extends Component {
             }}
           />
         </View>
-        {isRefreshing && RefreshComponent && (
-          <RefreshComponent
-            style={[
-              styles.loadingSpinner,
-              { right: pageWidth / 2, top: windowHeight / 2 },
-            ]}
-          />
-        )}
+
         <ScrollView
           onStartShouldSetResponderCapture={() => false}
           onMoveShouldSetResponderCapture={() => false}
@@ -692,6 +685,9 @@ export default class WeekView extends Component {
           onMomentumScrollBegin={this.verticalScrollBegun}
           onMomentumScrollEnd={this.verticalScrollEnded}
           ref={this.verticalAgendaRef}
+          refreshControl={
+            <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+          }
         >
           <View style={styles.scrollViewContent}>
             <Times
@@ -829,7 +825,6 @@ WeekView.propTypes = {
   onMonthPress: PropTypes.func,
   onDayPress: PropTypes.func,
   isRefreshing: PropTypes.bool,
-  RefreshComponent: PropTypes.elementType,
   windowSize: PropTypes.number,
   initialNumToRender: PropTypes.number,
   maxToRenderPerBatch: PropTypes.number,
@@ -839,6 +834,7 @@ WeekView.propTypes = {
   CustomTitleComponent: PropTypes.elementType,
   CustomHeaderComponent: PropTypes.elementType,
   CustomWeekViewHeaderComponent: PropTypes.elementType,
+  onRefresh: PropTypes.func,
 };
 
 WeekView.defaultProps = {
@@ -854,7 +850,6 @@ WeekView.defaultProps = {
   showTitle: true,
   rightToLeft: false,
   prependMostRecent: false,
-  RefreshComponent: ActivityIndicator,
   windowSize: DEFAULT_WINDOW_SIZE,
   initialNumToRender: DEFAULT_WINDOW_SIZE,
   maxToRenderPerBatch: PAGES_OFFSET,
