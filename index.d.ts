@@ -185,8 +185,7 @@ export interface WeekViewProps {
   nowLineColor?: string;
   fixedHorizontally?: boolean;
   isRefreshing?: boolean;
-
-  RefreshComponent?: React.FC;
+  onRefresh?(): void;
 
   locale?: string;
   rightToLeft?: boolean;
