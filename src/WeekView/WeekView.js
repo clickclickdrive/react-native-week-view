@@ -562,6 +562,7 @@ export default class WeekView extends Component {
       onRefresh,
       CustomTitleComponent,
       headerContainerStyle,
+      columnHeaderStyle,
       CustomHeaderComponent,
       CustomWeekViewHeaderComponent,
     } = this.props;
@@ -671,6 +672,7 @@ export default class WeekView extends Component {
                   onDayPress={onDayPress}
                   dayWidth={dayWidth}
                   CustomHeaderComponent={CustomHeaderComponent}
+                  columnHeaderStyle={columnHeaderStyle}
                 />
               );
             }}
@@ -831,6 +833,7 @@ WeekView.propTypes = {
   updateCellsBatchingPeriod: PropTypes.number,
   // new Props
   headerContainerStyle: PropTypes.object,
+  columnHeaderStyle: PropTypes.object,
   CustomTitleComponent: PropTypes.elementType,
   CustomHeaderComponent: PropTypes.elementType,
   CustomWeekViewHeaderComponent: PropTypes.elementType,

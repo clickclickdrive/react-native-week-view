@@ -211,6 +211,7 @@ export interface WeekViewProps {
 
   // new props
   headerContainerStyle?: StyleProp<ViewStyle>;
+  columnHeaderStyle?: StyleProp<ViewStyle>;
   CustomTitleComponent?: React.FC<{ selectedDate: Moment }>;
   CustomHeaderComponent?: React.FC<HeaderComponentProps>;
   CustomWeekViewHeaderComponent?: React.FC;
