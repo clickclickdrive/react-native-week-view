@@ -63,11 +63,12 @@ const WeekViewHeader = ({
   dayWidth,
   // new Props,
   CustomHeaderComponent,
+  columnHeaderStyle,
 }) => {
   const columns =
     calculateDaysArray(initialDate, numberOfDays, rightToLeft) || [];
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, columnHeaderStyle]}>
       {columns.map((column) => (
         <Column
           style={style}
@@ -99,6 +100,7 @@ WeekViewHeader.propTypes = {
   dayWidth: PropTypes.number.isRequired,
   // new Props
   CustomHeaderComponent: PropTypes.elementType,
+  columnHeaderStyle: PropTypes.object,
 };
 
 WeekViewHeader.defaultProps = {
