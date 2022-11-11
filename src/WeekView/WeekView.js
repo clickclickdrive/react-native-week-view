@@ -565,6 +565,8 @@ export default class WeekView extends Component {
       columnHeaderStyle,
       CustomHeaderComponent,
       CustomWeekViewHeaderComponent,
+      isLoading,
+      Loader,
     } = this.props;
     const {
       currentMoment,
@@ -578,7 +580,7 @@ export default class WeekView extends Component {
       beginAgendaAt,
       endAgendaAt,
     );
-    const eventsByDate = this.bucketEventsByDate(events);
+    const eventsByDate = this.bucketEventsByDate(events, currentMoment);
     const horizontalInverted =
       (prependMostRecent && !rightToLeft) ||
       (!prependMostRecent && rightToLeft);
@@ -678,107 +680,112 @@ export default class WeekView extends Component {
             }}
           />
         </View>
-
-        <ScrollView
-          onStartShouldSetResponderCapture={() => false}
-          onMoveShouldSetResponderCapture={() => false}
-          onResponderTerminationRequest={() => false}
-          contentContainerStyle={Platform.OS === 'web' && styles.webScrollView}
-          onMomentumScrollBegin={this.verticalScrollBegun}
-          onMomentumScrollEnd={this.verticalScrollEnded}
-          ref={this.verticalAgendaRef}
-          refreshControl={
-            <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
-          }
-        >
-          <View style={styles.scrollViewContent}>
-            <Times
-              times={times}
-              textStyle={hourTextStyle}
-              timeLabelHeight={timeLabelHeight}
-              width={timeLabelsWidth}
-            />
-            <VirtualizedList
-              data={initialDates}
-              showsHorizontalScrollIndicator={false}
-              showsVerticalScrollIndicator={false}
-              getItem={(data, index) => data[index]}
-              getItemCount={(data) => data.length}
-              getItemLayout={this.getListItemLayout}
-              keyExtractor={(item) => item}
-              initialScrollIndex={PAGES_OFFSET}
-              scrollEnabled={!fixedHorizontally}
-              onStartShouldSetResponderCapture={() => false}
-              onMoveShouldSetResponderCapture={() => false}
-              onResponderTerminationRequest={() => false}
-              renderItem={({ item }) => {
-                return (
-                  <Events
-                    times={times}
-                    eventsByDate={eventsByDate}
-                    initialDate={item}
-                    numberOfDays={numberOfDays}
-                    onEventPress={onEventPress}
-                    onEventLongPress={onEventLongPress}
-                    onGridClick={onGridClick}
-                    onGridLongPress={onGridLongPress}
-                    beginAgendaAt={beginAgendaAt}
-                    timeLabelHeight={timeLabelHeight}
-                    EventComponent={EventComponent}
-                    eventContainerStyle={eventContainerStyle}
-                    gridRowStyle={gridRowStyle}
-                    gridColumnStyle={gridColumnStyle}
-                    rightToLeft={rightToLeft}
-                    showNowLine={showNowLine}
-                    nowLineColor={nowLineColor}
-                    onDragEvent={onDragEvent}
-                    pageWidth={pageWidth}
-                    dayWidth={dayWidth}
-                    verticalResolution={verticalResolution}
-                    onEditEvent={onEditEvent}
-                    editingEventId={editingEvent}
-                    editEventConfig={editEventConfig}
-                    dragEventConfig={dragEventConfig}
-                  />
-                );
-              }}
-              horizontal
-              pagingEnabled
-              inverted={horizontalInverted}
-              onScrollBeginDrag={() => {
-                this.setState({ isEventScrolling: true });
-              }}
-              onMomentumScrollBegin={() => {
-                this.scrollBegun();
-              }}
-              onMomentumScrollEnd={(event) => {
-                this.setState({ isEventScrolling: false });
-                this.scrollEnded(event);
-              }}
-              scrollEventThrottle={32}
-              onScroll={Animated.event(
-                [
-                  {
-                    nativeEvent: {
-                      contentOffset: {
-                        x: this.eventsGridScrollX,
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <ScrollView
+            onStartShouldSetResponderCapture={() => false}
+            onMoveShouldSetResponderCapture={() => false}
+            onResponderTerminationRequest={() => false}
+            contentContainerStyle={
+              Platform.OS === 'web' && styles.webScrollView
+            }
+            onMomentumScrollBegin={this.verticalScrollBegun}
+            onMomentumScrollEnd={this.verticalScrollEnded}
+            ref={this.verticalAgendaRef}
+            refreshControl={
+              <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+            }
+          >
+            <View style={styles.scrollViewContent}>
+              <Times
+                times={times}
+                textStyle={hourTextStyle}
+                timeLabelHeight={timeLabelHeight}
+                width={timeLabelsWidth}
+              />
+              <VirtualizedList
+                data={initialDates}
+                showsHorizontalScrollIndicator={false}
+                showsVerticalScrollIndicator={false}
+                getItem={(data, index) => data[index]}
+                getItemCount={(data) => data.length}
+                getItemLayout={this.getListItemLayout}
+                keyExtractor={(item) => item}
+                initialScrollIndex={PAGES_OFFSET}
+                scrollEnabled={!fixedHorizontally}
+                onStartShouldSetResponderCapture={() => false}
+                onMoveShouldSetResponderCapture={() => false}
+                onResponderTerminationRequest={() => false}
+                renderItem={({ item }) => {
+                  return (
+                    <Events
+                      times={times}
+                      eventsByDate={eventsByDate}
+                      initialDate={item}
+                      numberOfDays={numberOfDays}
+                      onEventPress={onEventPress}
+                      onEventLongPress={onEventLongPress}
+                      onGridClick={onGridClick}
+                      onGridLongPress={onGridLongPress}
+                      beginAgendaAt={beginAgendaAt}
+                      timeLabelHeight={timeLabelHeight}
+                      EventComponent={EventComponent}
+                      eventContainerStyle={eventContainerStyle}
+                      gridRowStyle={gridRowStyle}
+                      gridColumnStyle={gridColumnStyle}
+                      rightToLeft={rightToLeft}
+                      showNowLine={showNowLine}
+                      nowLineColor={nowLineColor}
+                      onDragEvent={onDragEvent}
+                      pageWidth={pageWidth}
+                      dayWidth={dayWidth}
+                      verticalResolution={verticalResolution}
+                      onEditEvent={onEditEvent}
+                      editingEventId={editingEvent}
+                      editEventConfig={editEventConfig}
+                      dragEventConfig={dragEventConfig}
+                    />
+                  );
+                }}
+                horizontal
+                pagingEnabled
+                inverted={horizontalInverted}
+                onScrollBeginDrag={() => {
+                  this.setState({ isEventScrolling: true });
+                }}
+                onMomentumScrollBegin={() => {
+                  this.scrollBegun();
+                }}
+                onMomentumScrollEnd={(event) => {
+                  this.setState({ isEventScrolling: false });
+                  this.scrollEnded(event);
+                }}
+                scrollEventThrottle={32}
+                onScroll={Animated.event(
+                  [
+                    {
+                      nativeEvent: {
+                        contentOffset: {
+                          x: this.eventsGridScrollX,
+                        },
                       },
                     },
-                  },
-                ],
-                { useNativeDriver: false },
-              )}
-              ref={this.eventsGridRef}
-              windowSize={windowSize}
-              initialNumToRender={initialNumToRender}
-              maxToRenderPerBatch={maxToRenderPerBatch}
-              updateCellsBatchingPeriod={updateCellsBatchingPeriod}
-              accessible
-              accessibilityLabel="Grid with horizontal scroll"
-              accessibilityHint="Grid with horizontal scroll"
-            />
-          </View>
-        </ScrollView>
+                  ],
+                  { useNativeDriver: false },
+                )}
+                ref={this.eventsGridRef}
+                windowSize={windowSize}
+                initialNumToRender={initialNumToRender}
+                maxToRenderPerBatch={maxToRenderPerBatch}
+                updateCellsBatchingPeriod={updateCellsBatchingPeriod}
+                accessible
+                accessibilityLabel="Grid with horizontal scroll"
+                accessibilityHint="Grid with horizontal scroll"
+              />
+            </View>
+          </ScrollView>
+        )}
       </GestureHandlerRootView>
     );
   }
@@ -838,6 +845,8 @@ WeekView.propTypes = {
   CustomHeaderComponent: PropTypes.elementType,
   CustomWeekViewHeaderComponent: PropTypes.elementType,
   onRefresh: PropTypes.func,
+  isLoading: PropTypes.bool,
+  Loader: PropTypes.elementType,
 };
 
 WeekView.defaultProps = {
