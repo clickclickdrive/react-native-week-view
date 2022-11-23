@@ -215,8 +215,8 @@ export interface WeekViewProps {
   CustomTitleComponent?: React.FC<{ selectedDate: Moment }>;
   CustomHeaderComponent?: React.FC<HeaderComponentProps>;
   CustomWeekViewHeaderComponent?: React.FC;
-  isLoading?: boolean;
-  Loader?: React.FC;
+  isError?: boolean;
+  ErrorComponent?: React.FC;
 }
 
 declare const WeekView: React.ComponentType<WeekViewProps>;

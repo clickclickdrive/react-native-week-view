@@ -565,8 +565,8 @@ export default class WeekView extends Component {
       columnHeaderStyle,
       CustomHeaderComponent,
       CustomWeekViewHeaderComponent,
-      isLoading,
-      Loader,
+      isError,
+      ErrorComponent,
     } = this.props;
     const {
       currentMoment,
@@ -680,8 +680,8 @@ export default class WeekView extends Component {
             }}
           />
         </View>
-        {isLoading ? (
-          <Loader />
+        {isError ? (
+          <ErrorComponent />
         ) : (
           <ScrollView
             onStartShouldSetResponderCapture={() => false}
@@ -845,8 +845,8 @@ WeekView.propTypes = {
   CustomHeaderComponent: PropTypes.elementType,
   CustomWeekViewHeaderComponent: PropTypes.elementType,
   onRefresh: PropTypes.func,
-  isLoading: PropTypes.bool,
-  Loader: PropTypes.elementType,
+  isError: PropTypes.bool,
+  ErrorComponent: PropTypes.elementType,
 };
 
 WeekView.defaultProps = {
