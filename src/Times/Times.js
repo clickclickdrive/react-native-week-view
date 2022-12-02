@@ -1,23 +1,38 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { View, Text } from 'react-native';
-import Animated, {
-  useAnimatedStyle,
-  withTiming,
-} from 'react-native-reanimated';
+import { View } from 'react-native';
+import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import styles from './Times.styles';
 
-const Times = ({ times, textStyle, width, timeLabelHeight }) => {
-  const lineStyle = useAnimatedStyle(() => ({
-    height: withTiming(timeLabelHeight),
-  }));
+const Times = ({
+  times,
+  textStyle,
+  width,
+  timeLabelHeight,
+  animatedGridStyle,
+  onChangeGridHeight,
+}) => {
+  useEffect(() => {
+    onChangeGridHeight && onChangeGridHeight(timeLabelHeight);
+  }, [timeLabelHeight]);
+
   return (
     <View style={[styles.container, { width }]}>
-      {times.map((time) => (
-        <Animated.View key={time} style={[styles.label, lineStyle]}>
-          <Text style={[styles.text, textStyle]}>{time}</Text>
-        </Animated.View>
-      ))}
+      {times.map((time) => {
+        return (
+          <Animated.View
+            key={time}
+            style={[
+              styles.label,
+              { height: timeLabelHeight },
+              animatedGridStyle,
+            ]}
+            collapsable={false}
+          >
+            <Time time={time} textStyle={textStyle} />
+          </Animated.View>
+        );
+      })}
     </View>
   );
 };
@@ -30,3 +45,20 @@ Times.propTypes = {
 };
 
 export default React.memo(Times);
+
+const Time = ({ time, textStyle }) => {
+  const animatedText = useAnimatedStyle(() => {
+    return {
+      color: time.slice(-2) !== '00' ? '#68727f' : '#354354',
+      fontWeight: time.slice(-2) !== '00' ? '400' : '700',
+    };
+  });
+
+  return (
+    <>
+      <Animated.Text style={[styles.text, textStyle, animatedText]}>
+        {time}
+      </Animated.Text>
+    </>
+  );
+};

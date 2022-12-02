@@ -1,10 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { View } from 'react-native';
-import Animated, {
-  useAnimatedStyle,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 import moment from 'moment';
 import memoizeOne from 'memoize-one';
 
@@ -19,6 +16,7 @@ import {
   calculateDaysArray,
   DATE_STR_FORMAT,
   availableNumberOfDays,
+  minutesInDay,
 } from '../utils/dates';
 import { topToSecondsInDay as topToSecondsInDayFromUtils } from '../utils/dimensions';
 import { ViewWithTouchable } from '../utils/gestures';
@@ -48,14 +46,25 @@ const processEvents = (
   });
 };
 
-const Lines = ({ initialDate, times, timeLabelHeight, gridRowStyle }) => {
-  const heightStyle = useAnimatedStyle(() => ({
-    height: withTiming(timeLabelHeight),
-  }));
+const Lines = ({
+  initialDate,
+  times,
+  timeLabelHeight,
+  gridRowStyle,
+  animatedGridStyle,
+  highlightLineStyle,
+}) => {
   return times.map((time) => (
     <Animated.View
+      collapsable={false}
       key={`${initialDate}-${time}`}
-      style={[styles.timeRow, gridRowStyle, heightStyle]}
+      style={[
+        styles.timeRow,
+        gridRowStyle,
+        { height: timeLabelHeight },
+        animatedGridStyle,
+        time.slice(-2) === '00' && highlightLineStyle,
+      ]}
     />
   ));
 };
@@ -191,6 +200,9 @@ class Events extends PureComponent {
       onEditEvent,
       editingEventId,
       editEventConfig,
+      zoomingScale,
+      animatedGridStyle,
+      highlightLineStyle,
     } = this.props;
     const totalEvents = this.processEvents(
       eventsByDate,
@@ -206,6 +218,8 @@ class Events extends PureComponent {
           times={times}
           timeLabelHeight={timeLabelHeight}
           gridRowStyle={gridRowStyle}
+          animatedGridStyle={animatedGridStyle}
+          highlightLineStyle={highlightLineStyle}
         />
         <ViewWithTouchable
           style={styles.eventsContainer}
@@ -243,6 +257,10 @@ class Events extends PureComponent {
                     onEdit={onEditEvent && this.handleEditEvent}
                     editingEventId={editingEventId}
                     editEventConfig={editEventConfig}
+                    beginAgendaAt={beginAgendaAt}
+                    verticalResolution={verticalResolution}
+                    mins={minutesInDay(box.startDate)}
+                    zoomingScale={zoomingScale}
                   />
                 );
               })}
@@ -279,6 +297,7 @@ Events.propTypes = {
   timeLabelHeight: PropTypes.number.isRequired,
   onEditEvent: PropTypes.func,
   editingEventId: PropTypes.number,
+  highlightLineStyle: PropTypes.object,
 };
 
 export default Events;

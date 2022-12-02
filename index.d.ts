@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleProp, ViewStyle, TextStyle } from 'react-native';
 import { Moment } from 'moment';
+import { SharedValue } from 'react-native-reanimated';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface WeekViewEvent extends Record<string, any> {
@@ -218,6 +219,22 @@ export interface WeekViewProps {
   CustomWeekViewHeaderComponent?: React.FC;
   isError?: boolean;
   ErrorComponent?: React.FC;
+
+  // zooming Props
+  zoomingScale: SharedValue<number>;
+  animatedGridStyle?: StyleProp<ViewStyle>;
+  onChangeGridHeight?: (height: number) => void;
+
+  /*
+  highlightLineStyle: should contain only borderTopWidth & borderTopColor
+
+  example:
+  highlightLineStyle:{
+    borderTopWidth: 1.25,
+    borderTopColor: '#ccd0d4',
+  }
+  */
+  highlightLineStyle?: StyleProp<ViewStyle>;
 }
 
 declare const WeekView: React.ComponentType<WeekViewProps>;

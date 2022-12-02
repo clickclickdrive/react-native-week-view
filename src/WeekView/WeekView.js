@@ -567,6 +567,11 @@ export default class WeekView extends Component {
       CustomWeekViewHeaderComponent,
       isError,
       ErrorComponent,
+      // Zoom
+      zoomingScale,
+      animatedGridStyle,
+      onChangeGridHeight,
+      highlightLineStyle,
     } = this.props;
     const {
       currentMoment,
@@ -703,6 +708,8 @@ export default class WeekView extends Component {
                 textStyle={hourTextStyle}
                 timeLabelHeight={timeLabelHeight}
                 width={timeLabelsWidth}
+                animatedGridStyle={animatedGridStyle}
+                onChangeGridHeight={onChangeGridHeight}
               />
               <VirtualizedList
                 data={initialDates}
@@ -745,6 +752,9 @@ export default class WeekView extends Component {
                       editingEventId={editingEvent}
                       editEventConfig={editEventConfig}
                       dragEventConfig={dragEventConfig}
+                      zoomingScale={zoomingScale}
+                      animatedGridStyle={animatedGridStyle}
+                      highlightLineStyle={highlightLineStyle}
                     />
                   );
                 }}
@@ -847,12 +857,13 @@ WeekView.propTypes = {
   onRefresh: PropTypes.func,
   isError: PropTypes.bool,
   ErrorComponent: PropTypes.elementType,
+  highlightLineStyle: PropTypes.object,
 };
 
 WeekView.defaultProps = {
   events: [],
   locale: 'en',
-  hoursInDisplay: 6,
+  hoursInDisplay: 20,
   weekStartsOn: 1,
   timeStep: 60,
   beginAgendaAt: 0,
@@ -866,4 +877,8 @@ WeekView.defaultProps = {
   initialNumToRender: DEFAULT_WINDOW_SIZE,
   maxToRenderPerBatch: PAGES_OFFSET,
   updateCellsBatchingPeriod: 50, // RN default
+  highlightLineStyle: {
+    borderTopWidth: 1.25,
+    borderTopColor: '#ccd0d4',
+  },
 };

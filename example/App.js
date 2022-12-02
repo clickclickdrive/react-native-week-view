@@ -1,5 +1,4 @@
 import React, {useState, useReducer, useRef, useCallback} from 'react';
-import {View} from 'react-native';
 import {
   SafeAreaView,
   StyleSheet,
@@ -7,6 +6,14 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
+import {PinchGestureHandler} from 'react-native-gesture-handler';
+
+import Animated, {
+  useAnimatedGestureHandler,
+  useAnimatedStyle,
+  runOnJS,
+  useSharedValue,
+} from 'react-native-reanimated';
 
 import WeekView, {createFixedWeekDate} from 'react-native-week-view';
 import {buildDateCycler, makeBuilder} from './debug-utils';
@@ -175,63 +182,88 @@ const App = ({}) => {
     console.log('Month: ', date, formattedDate);
   }, []);
 
+  //-- Zoom --//
+  const scale = useSharedValue(1);
+  // Default height of the grid & event Time & event Line
+  const [height, setHeight] = useState(23.44);
+  const [timeStep, setTimeStep] = useState(15);
+  const [zoomLevel, setZoomLevel] = useState(1);
+
+  // Default scale is 1, max and min scale to limit zooming(avoid infinite zooming)
+  // inferior scale to display/hide the 15minsLines between hours ( hide 15minsLines if scale < 0.7)
+  const MAX_SCALE = 2,
+    INFERIOR_SCALE = 0.7,
+    MIN_SCALE = 0.5;
+
+  const onGestureEvent = useAnimatedGestureHandler({
+    onActive: (event, context) => {
+      const baseScale = event.scale * context.scale;
+
+      if (baseScale < MAX_SCALE && baseScale > MIN_SCALE) {
+        scale.value = baseScale;
+
+        runOnJS(setTimeStep)(baseScale >= INFERIOR_SCALE ? 15 : 60);
+        runOnJS(setZoomLevel)(baseScale.toFixed(0));
+      }
+    },
+    onStart: (_event, context) => {
+      context.scale = scale.value;
+    },
+  });
+
+  //height animation for the grid & event Time & event Line
+  const animatedGridStyle = useAnimatedStyle(() => {
+    return {
+      height: scale.value * height,
+    };
+  });
+
   return (
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView style={styles.container}>
-        <WeekView
-          ref={componentRef}
-          events={events}
-          selectedDate={new Date()}
-          numberOfDays={7}
-          onEventPress={handlePressEvent}
-          onEventLongPress={handleLongPressEvent}
-          onGridClick={handlePressGrid}
-          headerStyle={styles.header}
-          headerTextStyle={styles.headerText}
-          hourTextStyle={styles.hourText}
-          eventContainerStyle={styles.eventContainer}
-          gridColumnStyle={styles.gridColumn}
-          gridRowStyle={styles.gridRow}
-          formatDateHeader={showFixedComponent ? 'ddd' : 'ddd DD'}
-          hoursInDisplay={12}
-          timeStep={60}
-          startHour={15}
-          fixedHorizontally={showFixedComponent}
-          showTitle={!showFixedComponent}
-          timesColumnWidth={0.2}
-          showNowLine
-          onDragEvent={onDragEvent}
-          isRefreshing={false}
-          RefreshComponent={MyRefreshComponent}
-          onDayPress={onDayPress}
-          onMonthPress={onMonthPress}
-          onTimeScrolled={onTimeScrolled}
-          editingEvent={editingEvent}
-          onEditEvent={onEditEvent}
-          editEventConfig={EDIT_EVENT_CONFIG}
-          dragEventConfig={DRAG_EVENT_CONFIG}
-          // New Props
-          // pagingEnabled={false}
-          // hasBorderStyle={false}
-          // // remove styles.header in order to use headerContainerStyle
-          // headerContainerStyle={styles.headerContainerStyle}
-          // CustomTitleComponent={() => (
-          //   <View
-          //     style={{backgroundColor: 'white', width: '100%', height: '100%'}}
-          //   />
-          // )}
-          // CustomHeaderComponent={() => (
-          //   <View
-          //     style={{backgroundColor: 'brown', width: '100%', height: 140}}
-          //   />
-          // )}
-          // CustomWeekViewHeaderComponent={() => (
-          //   <View
-          //     style={{backgroundColor: 'pink', width: '100%', height: 140}}
-          //   />
-          // )}
-        />
+        <PinchGestureHandler onGestureEvent={onGestureEvent}>
+          <Animated.View style={[{flex: 1}]}>
+            <WeekView
+              ref={componentRef}
+              // ZOOM //
+              zoomingScale={scale}
+              animatedGridStyle={animatedGridStyle}
+              onChangeGridHeight={setHeight}
+              // highlightLineStyle={styles.highlightLine}
+              events={events}
+              selectedDate={new Date()}
+              numberOfDays={7}
+              onEventPress={handlePressEvent}
+              onEventLongPress={handleLongPressEvent}
+              onGridClick={handlePressGrid}
+              headerStyle={styles.header}
+              headerTextStyle={styles.headerText}
+              hourTextStyle={styles.hourText}
+              eventContainerStyle={styles.eventContainer}
+              gridColumnStyle={styles.gridColumn}
+              gridRowStyle={styles.gridRow}
+              formatDateHeader={showFixedComponent ? 'ddd' : 'ddd DD'}
+              hoursInDisplay={9}
+              timeStep={timeStep}
+              startHour={0}
+              // fixedHorizontally={showFixedComponent}
+              showTitle={!showFixedComponent}
+              timesColumnWidth={0.2}
+              showNowLine={false}
+              // onDragEvent={onDragEvent}
+              isRefreshing={false}
+              RefreshComponent={MyRefreshComponent}
+              onDayPress={onDayPress}
+              onMonthPress={onMonthPress}
+              onTimeScrolled={onTimeScrolled}
+              // editingEvent={editingEvent}
+              // onEditEvent={onEditEvent}
+              // editEventConfig={EDIT_EVENT_CONFIG}
+              // dragEventConfig={DRAG_EVENT_CONFIG}
+            />
+          </Animated.View>
+        </PinchGestureHandler>
       </SafeAreaView>
     </>
   );
@@ -270,6 +302,10 @@ const styles = StyleSheet.create({
     borderLeftWidth: 1,
     borderColor: '#E9EDF0',
   },
+  // highlightLine: {
+  //   borderTopWidth: 1.25,
+  //   borderTopColor: '#ccd0d4',
+  // },
 });
 
 export default App;

@@ -68,6 +68,10 @@ const Event = ({
   onEdit,
   editingEventId,
   editEventConfig,
+  zoomingScale,
+  beginAgendaAt,
+  verticalResolution,
+  mins,
 }) => {
   const isEditing = !!onEdit && editingEventId === event.id;
   const isDragEnabled =
@@ -271,6 +275,20 @@ const Event = ({
         runOnJS(onEditRelease)(params);
       });
 
+  const animatedEventStyle = useAnimatedStyle(() => {
+    return {
+      top:
+        (mins - (beginAgendaAt || 0)) *
+          (verticalResolution * zoomingScale.value) +
+        16,
+      height:
+        (currentHeight.value +
+          resizeByEdit.bottom.value -
+          resizeByEdit.top.value) *
+        zoomingScale.value,
+    };
+  });
+
   return (
     <GestureDetector gesture={composedGesture}>
       <Animated.View
@@ -286,6 +304,7 @@ const Event = ({
           containerStyle,
           event.style,
           animatedStyles,
+          animatedEventStyle,
         ]}
       >
         {EventComponent ? (
