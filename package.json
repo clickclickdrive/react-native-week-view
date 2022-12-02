@@ -60,6 +60,7 @@
     "react": "17.0.2",
     "react-native": "0.68.2",
     "react-native-gesture-handler": "^2.4.1",
+    "lodash": "4.17.15",
     "react-native-reanimated": "^2.8.0",
     "react-test-renderer": "17.0.2",
     "typescript": "^4.8.3"
@@ -68,7 +69,8 @@
     "react": "^16.8.0 || ^17.0.0",
     "react-native": "^0.60.0",
     "react-native-gesture-handler": "^2.3.2",
-    "react-native-reanimated": "^2.4.1"
+    "react-native-reanimated": "^2.4.1",
+    "lodash": "4.17.15"
   },
   "jest": {
     "preset": "react-native",

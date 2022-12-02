@@ -221,10 +221,8 @@ export interface WeekViewProps {
   ErrorComponent?: React.FC;
 
   // zooming Props
-  zoomingScale: SharedValue<number>;
+  zoomingScale?: SharedValue<number>;
   animatedGridStyle?: StyleProp<ViewStyle>;
-  onChangeGridHeight?: (height: number) => void;
-
   /*
   highlightLineStyle: should contain only borderTopWidth & borderTopColor
 

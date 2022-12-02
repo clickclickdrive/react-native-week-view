@@ -185,9 +185,9 @@ const App = ({}) => {
   //-- Zoom --//
   const scale = useSharedValue(1);
   // Default height of the grid & event Time & event Line
+  //TODO: Add ComputeGridHeight
   const [height, setHeight] = useState(23.44);
   const [timeStep, setTimeStep] = useState(15);
-  const [zoomLevel, setZoomLevel] = useState(1);
 
   // Default scale is 1, max and min scale to limit zooming(avoid infinite zooming)
   // inferior scale to display/hide the 15minsLines between hours ( hide 15minsLines if scale < 0.7)
@@ -203,7 +203,6 @@ const App = ({}) => {
         scale.value = baseScale;
 
         runOnJS(setTimeStep)(baseScale >= INFERIOR_SCALE ? 15 : 60);
-        runOnJS(setZoomLevel)(baseScale.toFixed(0));
       }
     },
     onStart: (_event, context) => {
@@ -229,7 +228,6 @@ const App = ({}) => {
               // ZOOM //
               zoomingScale={scale}
               animatedGridStyle={animatedGridStyle}
-              onChangeGridHeight={setHeight}
               // highlightLineStyle={styles.highlightLine}
               events={events}
               selectedDate={new Date()}

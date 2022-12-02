@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Text, View, TouchableOpacity } from 'react-native';
 import moment from 'moment';
-
+import _ from 'lodash';
 import {
   getFormattedDate,
   calculateDaysArray,
@@ -69,7 +69,7 @@ const WeekViewHeader = ({
     calculateDaysArray(initialDate, numberOfDays, rightToLeft) || [];
   return (
     <View style={[styles.container, columnHeaderStyle]}>
-      {columns.map((column) => (
+      {_.map(columns, (column) => (
         <Column
           style={style}
           textStyle={textStyle}

@@ -1,11 +1,12 @@
 import moment from 'moment';
+import _ from 'lodash';
 import { DATE_STR_FORMAT } from '../utils/dates';
 
 const bucketEventsByDate = (e, currentMoment) => {
   // Stores the events hashed by their date
   // For example: { "2020-02-03": [event1, event2, ...] }
   // If an event spans through multiple days, adds the event multiple times
-  const events = e.filter((event) =>
+  const events = _.filter(e, (event) =>
     moment(event.endDate).isSame(moment(currentMoment), 'week'),
   );
   const sortedEvents = {};
@@ -41,7 +42,7 @@ const bucketEventsByDate = (e, currentMoment) => {
     }
   });
   // For each day, sort the events by the minute (in-place)
-  Object.keys(sortedEvents).forEach((date) => {
+  _.forEach(Object.keys(sortedEvents), (date) => {
     sortedEvents[date].sort((a, b) => {
       return moment(a.box.startDate).diff(b.box.startDate, 'minutes');
     });

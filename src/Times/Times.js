@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { View } from 'react-native';
 import Animated, { useAnimatedStyle } from 'react-native-reanimated';
+import _ from 'lodash';
 import styles from './Times.styles';
 
 const Times = ({
@@ -10,15 +11,10 @@ const Times = ({
   width,
   timeLabelHeight,
   animatedGridStyle,
-  onChangeGridHeight,
 }) => {
-  useEffect(() => {
-    onChangeGridHeight && onChangeGridHeight(timeLabelHeight);
-  }, [timeLabelHeight]);
-
   return (
     <View style={[styles.container, { width }]}>
-      {times.map((time) => {
+      {_.map(times, (time) => {
         return (
           <Animated.View
             key={time}

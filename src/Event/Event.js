@@ -276,17 +276,20 @@ const Event = ({
       });
 
   const animatedEventStyle = useAnimatedStyle(() => {
-    return {
-      top:
-        (mins - (beginAgendaAt || 0)) *
-          (verticalResolution * zoomingScale.value) +
-        16,
-      height:
-        (currentHeight.value +
-          resizeByEdit.bottom.value -
-          resizeByEdit.top.value) *
-        zoomingScale.value,
-    };
+    if (zoomingScale) {
+      return {
+        top:
+          (mins - (beginAgendaAt || 0)) *
+            (verticalResolution * zoomingScale.value) +
+          16,
+        height:
+          (currentHeight.value +
+            resizeByEdit.bottom.value -
+            resizeByEdit.top.value) *
+          zoomingScale.value,
+      };
+    }
+    return {};
   });
 
   return (

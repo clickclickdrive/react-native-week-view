@@ -5,6 +5,7 @@ import Animated from 'react-native-reanimated';
 import moment from 'moment';
 import memoizeOne from 'memoize-one';
 
+import _ from 'lodash';
 import NowLine from '../NowLine/NowLine';
 import Event from '../Event/Event';
 import {
@@ -40,7 +41,7 @@ const processEvents = (
   // example: [[event1, event2], [event3, event4], [event5]], each child array
   // is events for specific day in range
   const dates = calculateDaysArray(initialDate, numberOfDays, rightToLeft);
-  return dates.map((date) => {
+  return _.map(dates, (date) => {
     const dateStr = date.format(DATE_STR_FORMAT);
     return resolveEventOverlaps(eventsByDate[dateStr] || []);
   });
@@ -54,7 +55,7 @@ const Lines = ({
   animatedGridStyle,
   highlightLineStyle,
 }) => {
-  return times.map((time) => (
+  return _.map(times, (time) => (
     <Animated.View
       collapsable={false}
       key={`${initialDate}-${time}`}
@@ -226,7 +227,7 @@ class Events extends PureComponent {
           onPress={onGridClick && this.handleGridPress}
           onLongPress={onGridLongPress && this.handleGridLongPress}
         >
-          {totalEvents.map((eventsInSection, dayIndex) => (
+          {_.map(totalEvents, (eventsInSection, dayIndex) => (
             <View
               style={[styles.eventsColumn, gridColumnStyle]}
               key={`${initialDate}-${dayIndex}`}
@@ -239,7 +240,7 @@ class Events extends PureComponent {
                   beginAgendaAt={beginAgendaAt}
                 />
               )}
-              {eventsInSection.map((item) => {
+              {_.map(eventsInSection, (item) => {
                 const { ref: event, box, overlap = {} } = item;
                 return (
                   <Event

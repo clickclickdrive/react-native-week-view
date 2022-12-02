@@ -567,10 +567,8 @@ export default class WeekView extends Component {
       CustomWeekViewHeaderComponent,
       isError,
       ErrorComponent,
-      // Zoom
       zoomingScale,
       animatedGridStyle,
-      onChangeGridHeight,
       highlightLineStyle,
     } = this.props;
     const {
@@ -709,7 +707,6 @@ export default class WeekView extends Component {
                 timeLabelHeight={timeLabelHeight}
                 width={timeLabelsWidth}
                 animatedGridStyle={animatedGridStyle}
-                onChangeGridHeight={onChangeGridHeight}
               />
               <VirtualizedList
                 data={initialDates}
