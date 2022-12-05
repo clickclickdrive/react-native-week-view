@@ -14,6 +14,11 @@ const styles = StyleSheet.create({
     borderColor: GREY_COLOR,
     backgroundColor: 'transparent',
   },
+  transparentLine: {
+    borderTopWidth: 1,
+    borderColor: 'transparent',
+    backgroundColor: 'transparent',
+  },
   eventsColumn: {
     flex: 1,
     borderColor: GREY_COLOR,

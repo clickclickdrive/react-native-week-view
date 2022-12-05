@@ -17,6 +17,14 @@ import Animated, {
 
 import WeekView, {createFixedWeekDate} from 'react-native-week-view';
 import {buildDateCycler, makeBuilder} from './debug-utils';
+import {
+  defaultGridHeight,
+  DEFAULT_TIME_STEP,
+  HOURS_IN_DISPLAY,
+  INFERIOR_SCALE,
+  MAX_SCALE,
+  MIN_SCALE,
+} from './utils';
 
 const buildEvent = makeBuilder();
 
@@ -183,37 +191,27 @@ const App = ({}) => {
   }, []);
 
   //-- Zoom --//
-  const scale = useSharedValue(1);
-  // Default height of the grid & event Time & event Line
-  //TODO: Add ComputeGridHeight
-  const [height, setHeight] = useState(23.44);
-  const [timeStep, setTimeStep] = useState(15);
 
-  // Default scale is 1, max and min scale to limit zooming(avoid infinite zooming)
-  // inferior scale to display/hide the 15minsLines between hours ( hide 15minsLines if scale < 0.7)
-  const MAX_SCALE = 2,
-    INFERIOR_SCALE = 0.7,
-    MIN_SCALE = 0.5;
+  const scale = useSharedValue(1);
+
+  const [hideMinStep, setHideMinStep] = useState(false);
 
   const onGestureEvent = useAnimatedGestureHandler({
     onActive: (event, context) => {
-      const baseScale = event.scale * context.scale;
+      const zoomScale = event.scale * context.scale;
+      if (zoomScale < MAX_SCALE && zoomScale > MIN_SCALE) {
+        scale.value = zoomScale;
 
-      if (baseScale < MAX_SCALE && baseScale > MIN_SCALE) {
-        scale.value = baseScale;
-
-        runOnJS(setTimeStep)(baseScale >= INFERIOR_SCALE ? 15 : 60);
+        runOnJS(setHideMinStep)(zoomScale <= INFERIOR_SCALE);
       }
     },
     onStart: (_event, context) => {
       context.scale = scale.value;
     },
   });
-
-  //height animation for the grid & event Time & event Line
   const animatedGridStyle = useAnimatedStyle(() => {
     return {
-      height: scale.value * height,
+      height: scale.value * defaultGridHeight,
     };
   });
 
@@ -228,7 +226,10 @@ const App = ({}) => {
               // ZOOM //
               zoomingScale={scale}
               animatedGridStyle={animatedGridStyle}
+              hideMinuteSteps={hideMinStep}
               // highlightLineStyle={styles.highlightLine}
+              timeStep={DEFAULT_TIME_STEP}
+              hoursInDisplay={HOURS_IN_DISPLAY}
               events={events}
               selectedDate={new Date()}
               numberOfDays={7}
@@ -242,8 +243,6 @@ const App = ({}) => {
               gridColumnStyle={styles.gridColumn}
               gridRowStyle={styles.gridRow}
               formatDateHeader={showFixedComponent ? 'ddd' : 'ddd DD'}
-              hoursInDisplay={9}
-              timeStep={timeStep}
               startHour={0}
               // fixedHorizontally={showFixedComponent}
               showTitle={!showFixedComponent}

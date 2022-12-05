@@ -50,10 +50,10 @@ const processEvents = (
 const Lines = ({
   initialDate,
   times,
-  timeLabelHeight,
   gridRowStyle,
   animatedGridStyle,
   highlightLineStyle,
+  hideMinuteSteps,
 }) => {
   return _.map(times, (time) => (
     <Animated.View
@@ -62,9 +62,9 @@ const Lines = ({
       style={[
         styles.timeRow,
         gridRowStyle,
-        { height: timeLabelHeight },
         animatedGridStyle,
         time.slice(-2) === '00' && highlightLineStyle,
+        time.slice(-2) !== '00' && hideMinuteSteps && styles.transparentLine,
       ]}
     />
   ));
@@ -204,6 +204,7 @@ class Events extends PureComponent {
       zoomingScale,
       animatedGridStyle,
       highlightLineStyle,
+      hideMinuteSteps,
     } = this.props;
     const totalEvents = this.processEvents(
       eventsByDate,
@@ -219,6 +220,7 @@ class Events extends PureComponent {
           times={times}
           timeLabelHeight={timeLabelHeight}
           gridRowStyle={gridRowStyle}
+          hideMinuteSteps={hideMinuteSteps}
           animatedGridStyle={animatedGridStyle}
           highlightLineStyle={highlightLineStyle}
         />
