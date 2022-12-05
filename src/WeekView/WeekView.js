@@ -570,6 +570,7 @@ export default class WeekView extends Component {
       zoomingScale,
       animatedGridStyle,
       highlightLineStyle,
+      hideMinuteSteps,
     } = this.props;
     const {
       currentMoment,
@@ -706,6 +707,7 @@ export default class WeekView extends Component {
                 textStyle={hourTextStyle}
                 timeLabelHeight={timeLabelHeight}
                 width={timeLabelsWidth}
+                hideMinuteSteps={hideMinuteSteps}
                 animatedGridStyle={animatedGridStyle}
               />
               <VirtualizedList
@@ -752,6 +754,7 @@ export default class WeekView extends Component {
                       zoomingScale={zoomingScale}
                       animatedGridStyle={animatedGridStyle}
                       highlightLineStyle={highlightLineStyle}
+                      hideMinuteSteps={hideMinuteSteps}
                     />
                   );
                 }}

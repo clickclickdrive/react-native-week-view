@@ -7,26 +7,23 @@ import styles from './Times.styles';
 
 const Times = ({
   times,
-  textStyle,
   width,
-  timeLabelHeight,
+  textStyle,
   animatedGridStyle,
+  hideMinuteSteps,
 }) => {
   return (
     <View style={[styles.container, { width }]}>
       {_.map(times, (time) => {
         return (
-          <Animated.View
+          <Time
             key={time}
-            style={[
-              styles.label,
-              { height: timeLabelHeight },
-              animatedGridStyle,
-            ]}
-            collapsable={false}
-          >
-            <Time time={time} textStyle={textStyle} />
-          </Animated.View>
+            time={time}
+            width={width}
+            textStyle={textStyle}
+            hideMinuteSteps={hideMinuteSteps}
+            animatedGridStyle={animatedGridStyle}
+          />
         );
       })}
     </View>
@@ -37,24 +34,38 @@ Times.propTypes = {
   times: PropTypes.arrayOf(PropTypes.string).isRequired,
   textStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   width: PropTypes.number.isRequired,
-  timeLabelHeight: PropTypes.number.isRequired,
 };
 
-export default React.memo(Times);
+const Time = ({
+  time,
+  width,
+  textStyle,
+  animatedGridStyle,
+  hideMinuteSteps,
+}) => {
+  const isHour = time.slice(-2) === '00';
+  const MARGIN_LEFT = width / 4;
 
-const Time = ({ time, textStyle }) => {
   const animatedText = useAnimatedStyle(() => {
     return {
-      color: time.slice(-2) !== '00' ? '#68727f' : '#354354',
-      fontWeight: time.slice(-2) !== '00' ? '400' : '700',
+      // eslint-disable-next-line no-nested-ternary
+      color: isHour ? '#354354' : hideMinuteSteps ? 'transparent' : '#68727f',
+      fontWeight: isHour ? '700' : '400',
+      left: isHour ? MARGIN_LEFT : MARGIN_LEFT + 1.5,
+      position: 'absolute',
     };
   });
 
   return (
-    <>
+    <Animated.View
+      style={[styles.label, animatedGridStyle]}
+      collapsable={false}
+    >
       <Animated.Text style={[styles.text, textStyle, animatedText]}>
         {time}
       </Animated.Text>
-    </>
+    </Animated.View>
   );
 };
+
+export default React.memo(Times);

@@ -223,10 +223,11 @@ export interface WeekViewProps {
   // zooming Props
   zoomingScale?: SharedValue<number>;
   animatedGridStyle?: StyleProp<ViewStyle>;
+  hideMinuteSteps?: boolean;
   /*
   highlightLineStyle: should contain only borderTopWidth & borderTopColor
 
-  example:
+  default value:
   highlightLineStyle:{
     borderTopWidth: 1.25,
     borderTopColor: '#ccd0d4',
