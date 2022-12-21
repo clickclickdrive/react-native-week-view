@@ -19,7 +19,6 @@ const Times = ({
           <Time
             key={time}
             time={time}
-            width={width}
             textStyle={textStyle}
             hideMinuteSteps={hideMinuteSteps}
             animatedGridStyle={animatedGridStyle}
@@ -36,22 +35,14 @@ Times.propTypes = {
   width: PropTypes.number.isRequired,
 };
 
-const Time = ({
-  time,
-  width,
-  textStyle,
-  animatedGridStyle,
-  hideMinuteSteps,
-}) => {
+const Time = ({ time, textStyle, animatedGridStyle, hideMinuteSteps }) => {
   const isHour = time.slice(-2) === '00';
-  const MARGIN_LEFT = width / 4;
 
   const animatedText = useAnimatedStyle(() => {
     return {
       // eslint-disable-next-line no-nested-ternary
       color: isHour ? '#354354' : hideMinuteSteps ? 'transparent' : '#68727f',
       fontWeight: isHour ? '700' : '400',
-      left: isHour ? MARGIN_LEFT : MARGIN_LEFT + 1.5,
       position: 'absolute',
     };
   });

@@ -240,6 +240,7 @@ class Events extends PureComponent {
                   verticalResolution={verticalResolution}
                   width={dayWidth}
                   beginAgendaAt={beginAgendaAt}
+                  zoomingScale={zoomingScale}
                 />
               )}
               {_.map(eventsInSection, (item) => {

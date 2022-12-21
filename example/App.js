@@ -225,8 +225,8 @@ const App = ({}) => {
               ref={componentRef}
               // ZOOM //
               zoomingScale={scale}
-              animatedGridStyle={animatedGridStyle}
               hideMinuteSteps={hideMinStep}
+              animatedGridStyle={animatedGridStyle}
               // highlightLineStyle={styles.highlightLine}
               timeStep={DEFAULT_TIME_STEP}
               hoursInDisplay={HOURS_IN_DISPLAY}
@@ -247,7 +247,7 @@ const App = ({}) => {
               // fixedHorizontally={showFixedComponent}
               showTitle={!showFixedComponent}
               timesColumnWidth={0.2}
-              showNowLine={false}
+              showNowLine={true}
               // onDragEvent={onDragEvent}
               isRefreshing={false}
               RefreshComponent={MyRefreshComponent}

@@ -3,7 +3,6 @@ import { View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useDerivedValue,
-  withTiming,
 } from 'react-native-reanimated';
 import PropTypes from 'prop-types';
 
@@ -27,15 +26,25 @@ const useMinutesNow = (updateEvery = UPDATE_EVERY_MILLISECONDS) => {
   return minutesInDay(now);
 };
 
-const NowLine = ({ verticalResolution, beginAgendaAt, color, width }) => {
+const NowLine = ({
+  verticalResolution,
+  beginAgendaAt,
+  color,
+  width,
+  zoomingScale,
+}) => {
   const minutesNow = useMinutesNow();
 
   const currentTop = useDerivedValue(() =>
-    minutesInDayToTop(minutesNow, verticalResolution, beginAgendaAt),
+    minutesInDayToTop(
+      minutesNow,
+      verticalResolution * zoomingScale.value,
+      beginAgendaAt,
+    ),
   );
 
   const animatedStyle = useAnimatedStyle(() => ({
-    top: withTiming(currentTop.value),
+    top: currentTop.value,
   }));
 
   return (
