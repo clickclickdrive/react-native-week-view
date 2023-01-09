@@ -14,7 +14,6 @@ import Animated, {
 import styles, { circleStyles } from './Event.styles';
 import { EventPropType, EditEventConfigPropType } from '../utils/types';
 
-const DEFAULT_COLOR = 'red';
 const UPDATE_EVENT_ANIMATION_DURATION = 150;
 const SIDES = ['bottom', 'top', 'left', 'right'];
 
@@ -302,7 +301,7 @@ const Event = ({
         style={[
           styles.container,
           {
-            backgroundColor: event.color || DEFAULT_COLOR,
+            backgroundColor: event.color,
           },
           containerStyle,
           event.style,
