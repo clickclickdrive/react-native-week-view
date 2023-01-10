@@ -74,7 +74,7 @@ class Events extends PureComponent {
   topToSecondsInDay = (yValue) =>
     topToSecondsInDayFromUtils(
       yValue,
-      this.props.verticalResolution,
+      this.props.verticalResolution * this.props?.zoomingScale?.value || 1,
       this.props.beginAgendaAt,
     );
 
