@@ -584,7 +584,7 @@ export default class WeekView extends Component {
       beginAgendaAt,
       endAgendaAt,
     );
-    const eventsByDate = this.bucketEventsByDate(events, currentMoment);
+    const eventsByDate = this.bucketEventsByDate(events);
     const horizontalInverted =
       (prependMostRecent && !rightToLeft) ||
       (!prependMostRecent && rightToLeft);
