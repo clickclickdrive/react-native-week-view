@@ -291,8 +291,16 @@ const Event = ({
     return {};
   });
 
+  const EventContainer = ({ children }) => {
+    if (isDragEnabled)
+      return (
+        <GestureDetector gesture={composedGesture}>{children}</GestureDetector>
+      );
+    return <>{children}</>;
+  };
+
   return (
-    <GestureDetector gesture={composedGesture}>
+    <EventContainer>
       <Animated.View
         testID={`WeekViewEvent-${event.id}`}
         accessible
@@ -325,7 +333,7 @@ const Event = ({
           buildCircleGesture={buildCircleGesture}
         />
       </Animated.View>
-    </GestureDetector>
+    </EventContainer>
   );
 };
 
