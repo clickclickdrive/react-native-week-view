@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { View, Text } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedStyle,
@@ -296,7 +296,7 @@ const Event = ({
       return (
         <GestureDetector gesture={composedGesture}>{children}</GestureDetector>
       );
-    return <>{children}</>;
+    return <Pressable onPress={() => onPressWrapper()}>{children}</Pressable>;
   };
 
   return (
