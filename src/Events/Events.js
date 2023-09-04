@@ -304,4 +304,4 @@ Events.propTypes = {
   highlightLineStyle: PropTypes.object,
 };
 
-export default Events;
+export default React.memo(Events);
