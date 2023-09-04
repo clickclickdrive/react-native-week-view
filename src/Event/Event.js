@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, Pressable, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedStyle,
@@ -138,11 +138,19 @@ const Event = ({
       width:
         currentWidth.value + resizeByEdit.right.value - resizeByEdit.left.value,
       left: currentLeft.value + resizeByEdit.left.value,
-      top: currentTop.value + resizeByEdit.top.value,
-      height:
-        currentHeight.value +
-        resizeByEdit.bottom.value -
-        resizeByEdit.top.value,
+      top: zoomingScale
+        ? (mins - (beginAgendaAt || 0)) *
+            (verticalResolution * zoomingScale.value) +
+          16
+        : currentTop.value + resizeByEdit.top.value,
+      height: zoomingScale
+        ? (currentHeight.value +
+            resizeByEdit.bottom.value -
+            resizeByEdit.top.value) *
+          zoomingScale.value
+        : currentHeight.value +
+          resizeByEdit.bottom.value -
+          resizeByEdit.top.value,
       opacity: withSpring(currentOpacity.value),
     };
   });
@@ -274,23 +282,6 @@ const Event = ({
         runOnJS(onEditRelease)(params);
       });
 
-  const animatedEventStyle = useAnimatedStyle(() => {
-    if (zoomingScale) {
-      return {
-        top:
-          (mins - (beginAgendaAt || 0)) *
-            (verticalResolution * zoomingScale.value) +
-          16,
-        height:
-          (currentHeight.value +
-            resizeByEdit.bottom.value -
-            resizeByEdit.top.value) *
-          zoomingScale.value,
-      };
-    }
-    return {};
-  });
-
   const EventContainer = ({ children }) => {
     if (isDragEnabled)
       return (
@@ -318,7 +309,6 @@ const Event = ({
           containerStyle,
           event.style,
           animatedStyles,
-          animatedEventStyle,
         ]}
       >
         {EventComponent ? (
