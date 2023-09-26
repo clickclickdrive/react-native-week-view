@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import PropTypes from 'prop-types';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text } from 'react-native';
 import { GestureDetector, Gesture } from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedStyle,
@@ -219,6 +219,7 @@ const Event = ({
     longPressGesture,
     pressGesture,
   );
+  const PressComposedGesture = Gesture.Race(pressGesture);
 
   const buildCircleGesture = (side) =>
     Gesture.Pan()
@@ -288,9 +289,9 @@ const Event = ({
         <GestureDetector gesture={composedGesture}>{children}</GestureDetector>
       );
     return (
-      <TouchableOpacity onPress={() => onPressWrapper()}>
+      <GestureDetector gesture={PressComposedGesture}>
         {children}
-      </TouchableOpacity>
+      </GestureDetector>
     );
   };
 
